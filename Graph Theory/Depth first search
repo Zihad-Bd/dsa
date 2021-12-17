@@ -1,0 +1,12 @@
+int col[100005];
+vector<int> g[N];
+
+void dfs(int u) {
+   col[u] = 1;
+   for(auto v : g[u]) {
+      if ( !col[v]) {
+        dfs(v);
+      }
+   }
+   col[u] = 2;
+}
