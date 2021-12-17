@@ -1,0 +1,213 @@
+
+int par[n];
+int vis[n];
+
+bfs(vector<vector<int>>&resiG,int s,int t)
+{
+    queue<int>q;
+    vector<int>dis(n,0);
+    q.push(s);
+    //If there are many source push all in the queue
+    dis[s]=1;
+    while(!q.empty())
+    {
+        int u=q.front();
+        q.pop();
+        for(int v=0;v<n;++v)
+        {
+            if(!dis[v]&&resiG[u][v])
+            {
+                par[v]=u;
+                if(v==t)
+                    return 1;
+                //If there are many sink return 1 If v==any sink
+                q.push(v);
+                dis[v]=1;
+            }
+        }
+    }
+    return 0;
+}
+
+int dfs(vector<vector<int>>&resiG,int u,int t)
+{
+    if(u==t)
+        return 1;
+    vis[n]=1;
+    int Max=0;
+    for(int v=0;v<n;++v)
+    {
+        if(!vis[v]&&resiG[u][v])
+        {
+            par[v]=u;
+            Max=max(dfs(resiG,v,t),Max);
+        }
+    }
+    return Max;
+}
+
+int fordFulkerson(vector<vector<int>>&G,int s,int t)
+{
+    int max_flow=0;
+    vector<vector<int>>resiG(n,vector<int>(n));
+    for(int i=0;i<n;++i)
+    {
+        for(int j=0;j<n;++j)
+        {
+            resiG[i][j]=G[i][j];
+        }
+    }
+    while(dfs(resiG,s,t))
+    //while(bfs(resiG,s,t))  //Edmond Carp algorithm
+    {
+        int min_flow=inf;
+        for(int v=t;v!=s;v=par[v])
+        {
+            int u=par[v];
+            min_flow=min(min_flow,resiG[u][v]);
+        }
+        for(int v=t;v!=s;v=par[v])
+        {
+            int u=par[v];
+            resiG[u][v]-=min_flow;
+            resiG[v][u]+=min_flow;
+        }
+        max_flow+=min_flow;
+    }
+    return max_flow;
+}
+
+int main()
+{
+    vector<vector<int>>G{{0,0,25,0,0,0},
+                          {0,0,0,15,0,0},
+                          {0,0,0,0,0,10},
+                          {6,0,0,0,0,10},
+                          {10,10,0,0,0,0},
+                          {0,0,0,0,0,0}};
+    cout<<fordFulkerson(G,4,5);
+    return 0;
+}
+
+                   //With many source and sink and node capacity//
+
+/*#define N 205
+vector<vector<int>>G(N),W(N,vector<int>(N));
+vector<int>par(N);
+int S,D;
+
+int bfs(int n)
+{
+    vector<int>vis(n+1,0);
+    queue<int>q;
+    q.push(S);
+    vis[S]=1;
+    while(!q.empty())
+    {
+        int u=q.front();
+        q.pop();
+        for(int i=0;i<G[u].size();++i)
+        {
+            int v=G[u][i];
+            if(!vis[v]&&W[u][v])
+            {
+                vis[v]=1;
+                q.push(v);
+                par[v]=u;
+                if(v==D)
+                    return 1;
+            }
+        }
+    }
+    return 0;
+}
+
+int FordFulkerson(int n)
+{
+    int maxFlow=0;
+    while(bfs(n))
+    {
+        int minFlow=inf;
+        for(int v=D;v!=S;)
+        {
+            int u=par[v];
+            minFlow=min(minFlow,W[u][v]);
+            v=u;
+        }
+        for(int v=D;v!=S;)
+        {
+
+            int u=par[v];
+            W[u][v]-=minFlow;
+            W[v][u]+=minFlow;
+            v=u;
+        }
+        maxFlow+=minFlow;
+    }
+    return maxFlow;
+}
+
+int main()
+{
+    int t;
+    scanf("%d",&t);
+    for(int c=1;c<=t;++c)
+    {
+        int n,m,B,Dh;
+        cin>>n;
+        S=0;
+        D=2*n+1;
+        //Here we use master source and master sink.All the source are connected with super
+        //source with incoming edges and all the sink are connected with super sink with
+        //outgoing edges.
+        //super source-->sources,sinks-->super sink
+        for(int i=0;i<=D;++i)
+        {
+            G[i].clear();
+        }
+        for(int i=1;i<=n;++i)
+        {
+            int Cap;
+            cin>>Cap;
+            G[n+i].push_back(i);
+            W[n+i][i]=Cap;
+            G[i].push_back(n+i);
+            W[i][n+i]=0;
+            //duplicate node-->original node
+        }
+        cin>>m;
+        while(m--)
+        {
+            int n1,n2,w;
+            cin>>n1>>n2>>w;
+            G[n1].push_back(n2+n);
+            W[n1][n2+n]=w;
+            G[n2+n].push_back(n1);
+            W[n2+n][n1]=0;
+            //n1-->duplicate n
+        }
+        cin>>B>>Dh;
+        for(int i=1;i<=B;++i)
+        {
+            int src;
+            cin>>src;
+            G[0].push_back(src+n);
+            W[0][src+n]=inf;
+            G[src+n].push_back(0);
+            W[src+n][0]=0;
+            //super source->sources
+        }
+        for(int i=1;i<=Dh;++i)
+        {
+            int des;
+            cin>>des;
+            G[des].push_back(D);
+            W[des][D]=inf;
+            G[D].push_back(des);
+            W[D][des]=0;
+            //sinks->super sink
+        }
+        cout<<"Case "<<c<<": "<<FordFulkerson(2*n+2)<<endl;
+    }
+    return 0;
+}*/
