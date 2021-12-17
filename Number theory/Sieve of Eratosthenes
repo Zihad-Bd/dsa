@@ -1,0 +1,22 @@
+bool isP[N + 5];
+vector<int> primes;
+void sieve() {
+    fill(isP, isP + N, 1);
+    isP[0] = isP[1] = 0;
+    for (ll i = 4; i <= N; i += 2) {
+        isP[i] = 0;
+    }
+    for (ll i = 3; i * i <= N; i += 2) {
+        if (isP[i]) {
+            for (ll j = i * i; j <= N; j += i + i) {
+               isP[j] = 0;
+            }
+        }
+    }
+    primes.eb(2);
+    for (ll i = 3; i <= N; i += 2) {
+        if (isP[i]) {
+            primes.eb(i);
+        }
+    }
+}
