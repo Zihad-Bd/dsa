@@ -1,0 +1,12 @@
+vector<int>  findDivs(int num) {
+   vector<int> divs;     
+   for (int i = 1; i * i <= num; ++i) {
+      if (num % i == 0) {
+         divs.eb(i);
+         if (i * i != num) {
+            divs.eb(num / i);
+         }
+      }
+   }
+   return divs;
+}
