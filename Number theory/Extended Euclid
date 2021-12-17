@@ -1,0 +1,27 @@
+ll x, y, d;
+
+void extendedEuclid(ll a, ll b) {
+   if (b == 0) {
+      d = a;
+      x = 1;
+      y = 0;
+   } else {
+      extendedEuclid(b, a % b);
+      ll temp = x;
+      x = y;
+      y = temp - (a / b) * y;
+   }
+}
+
+int main() {
+   IOS;
+   ll tt;
+   cin >> tt;
+   for (ll cc = 1; cc <= tt; ++cc) {
+      ll a, b;
+      cin >>a >>b;
+      extendedEuclid(a, b);
+      cout << d << ' ' << x << ' ' << y << endl;
+   }
+   return 0;
+}
