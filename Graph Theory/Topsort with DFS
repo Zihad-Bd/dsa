@@ -1,0 +1,50 @@
+vector<int>topsort;
+int col[100005];
+int ok = 1;
+
+void dfs(int u,vector<int>G[])
+{
+    col[u]=1;
+    for(auto v : G[u])
+    {
+        if(!col[v])
+        {
+            dfs(v,G);
+        }
+        else if (col[v] == 1)
+        {
+            ok = 0;
+        }
+    }
+    col[u] = 2;
+    topsort.push_back(u);
+}
+int main()
+{
+    int node,e;
+    scanf("%d%d",&node,&e);
+    vector<int>G[node+5];
+    while(e--)
+    {
+        int node1,node2;
+        scanf("%d%d",&node1,&node2);
+        G[node1].push_back(node2);
+        /// node1 is depended on node2
+    }
+    for(int i=1; i<=node; ++i)
+    {
+        if(!col[i])
+        {
+            dfs(i,G);
+        }
+    }
+    if ( !ok) {
+       cout << "impossible";
+    } else {
+       for (int i = 0; i < node; ++i)
+       {
+           cout << topsort[i] << ' ';
+       }
+    }
+    return 0;
+}
