@@ -1,0 +1,8 @@
+int Find(int r,int par[])
+{
+    if(par[r]==r)
+    {
+        return r;
+    }
+    return par[r]=Find(par[r],par);
+}
