@@ -1,0 +1,129 @@
+/*Notes:
+1.size(),empty(),clear() functions are works properly
+2.equal_range() is not worked
+3.find_by_order() return a pair iterator or return an integer of first/second value of a pair
+4.order_of_key() return an integer
+*/
+#include<bits/stdc++.h>
+#define f first
+#define s second
+#define inf INT_MAX
+#include<ext/pb_ds/assoc_container.hpp>
+#include<ext/pb_ds/tree_policy.hpp>
+using namespace std;
+using namespace __gnu_pbds;
+typedef tree<pair<int,int>, null_type,less<pair<int, int>>, rb_tree_tag,
+             tree_order_statistics_node_update> indexed_multiset;
+int main()
+{
+    indexed_multiset ms;
+    ms.insert({2,3});
+    ms.insert({2,4});
+    ms.insert({4,2});
+    ms.insert({4,1});
+    ms.insert({5,4});
+    ms.insert({5,1});
+    //For iterate in forward direction-
+    for(auto it:ms)
+    {
+        cout<<it.f<<' '<<it.s<<endl;
+    }
+    /*For iterate from reverse direction-
+    for(auto it=ms.rbegin();it!=ms.rend();++it)
+    {
+        cout << it->f<<' '<<it->s<<endl;
+    }*/
+
+    /*For find a value by its index-
+    cout<<ms.find_by_order(2)->first<<' '<<ms.find_by_order(2)->second<<endl;
+    Another way,
+    pair<int,int>ret=*ms.find_by_order(2);
+    cout<<ret.first<<' '<<ret.second<<endl;
+    We find the value at index 2 in here*/
+
+    /*For find the index of a value-
+    cout<<ms.order_of_key({4,2})<<endl;
+    We find the index of {4,2} which is 3 in here
+    cout<<ms.order_of_key({4,-inf})<<endl;
+    We find the index of {4,1} which is 2 in here
+    note:For using {4,-inf} in here it works like lower_bound and find the index*/
+
+    /*For count the number of occurrence of a value-
+    int ind1=ms.order_of_key({4,-inf});
+    int ind2=ms.order_of_key({5,-inf});
+    int frequency=ind2-ind1;
+    Here we find the frequency of 4*/
+
+    /*For erase a val single time-
+    ms.erase(ms.lower_bound({2,-inf}));
+    We erase one occurrence of 2 in here*/
+
+    /*For erase a val single time with its inserting time-
+    ms.erase({2,3});
+    Another way,
+    auto it=ms.find({2,3});
+    ms.erase(it);
+    We erase 2 with inserting time 3 in here*/
+
+    /*For erase a val single time by its index-
+    ms.erase({ms.find_by_order(1)->f,ms.find_by_order(1)->s});
+    auto it=ms.find_by_order(1);
+    ms.erase({it->f,it->s});
+    We erase the value in index 1 in the multi set*/
+
+    /*For erase a value fully-
+    auto val=ms.lower_bound({2,-inf});
+    while(val->f==2)
+    {
+        ms.erase(val);
+        val=ms.lower_bound({2,-inf});
+    }
+    We erase 2 completely in here*/
+
+    /*for find a value-
+    auto val=ms.lower_bound({2,-inf});
+    if(val->f==2)
+    {
+        printf("found\n");
+    }
+    else
+    {
+        printf("not found\n");
+    }
+    We search 2 in the multi set*/
+
+    /*For find the lower_bound which returns the value-
+    auto val=*ms.lower_bound({3,-inf});
+    cout<<val.first<<endl;
+    cout<<ms.lower_bound({3,-inf})->first<<endl;
+    We find the lower_bound of 3 which is 4 in here
+    note:If the value is not in the set then returns end_of_file() which value is 0*/
+
+    /*For find the upper_bound which returns the value-
+    auto val=*ms.upper_bound({4,inf});
+    cout<<val.first<<endl;
+    cout<<ms.upper_bound({4,inf})->first<<endl;
+    We find the upper_bound of 4 which is 5 in here
+    note:If the value is not in the set then returns end_of_file() which value is 0*/
+
+    /*For find the lower_bound which returns the index-
+    cout<<ms.order_of_key({3,-inf})<<endl;
+    We find the lower_bound of 3 which is 4 at index 2 in here
+    note:If the value is not in the set then returns n.(n=size of the set)*/
+
+    /*For find the upper_bound which returns the index-
+    cout<<ms.order_of_key({2+1,-inf})<<endl;
+
+    or
+
+    cout<<ms.order_of_key({2,inf})<<endl;
+
+    We find the upper_bound of 2 which is 4 at index 2 in here
+    note:If the value is not in the set then returns n.(n=size of the set)*/
+
+    for(auto it:ms)
+    {
+        cout<<it.f<<' '<<it.s<<endl;
+    }
+    return 0;
+}
