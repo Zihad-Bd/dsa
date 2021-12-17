@@ -1,0 +1,50 @@
+
+vector<ll> mpd(N + 5), primeFr(N + 5);
+vector<pair<ll, ll> > primeFact;
+void minPrimeDivisor() {
+   for (ll i = 2; i <= N; i += 2) {
+      mpd[i] = 2;
+   }
+   for (ll i = 3; i * i <= N; i += 2) {
+      if ( !mpd[i]) {
+         for (ll j = i * i; j <= N; j += i + i) {
+            if (mpd[j] == 0) {
+               mpd[j] = i;
+            }
+         }
+      }
+   }
+   for (ll i = 3; i <= N; i += 2) {
+      if (mpd[i] == 0) {
+         mpd[i] = i;
+      }
+   }
+}
+
+void maxPrimeDivisor() {
+   for (ll i = 2; i <= N; i++) {
+      if ( !mpd[i]) {
+         for (ll j = i; j <= N; j += i) {
+            mpd[j] = i;
+         }
+      }
+   }
+}
+
+void factorize(ll n) {
+   while (n != 1) {
+      ll div = mpd[n];
+      ll cnt = 0;
+      while (mpd[n] == div) {
+         n /= mpd[n];
+         ++cnt;
+      }
+      primeFact.eb(div, cnt);
+   }
+}
+void factorize2() {
+   for(ll i = 2; i <= N; ++i) {
+      primeFr[i] = primeFr[i / mpd[i]] + 1;
+   }
+   /// primeFr[i] = number of prime factors of i, example 4 = 2 * 2, primeFr[4] = 2
+}
