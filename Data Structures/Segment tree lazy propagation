@@ -1,0 +1,79 @@
+int Tree[300005],lazy[300005];
+/*void build(int node,int s,int e)
+{
+    if(s==e)
+    {
+        Tree[node]=1;
+        return;
+    }
+    int m=(s+e)/2;
+    int l=node*2;
+    int r=node*2+1;
+    build(l,s,m);
+    build(r,m+1,e);
+    Tree[node]=Tree[l]+Tree[r];
+}*/
+//If needed
+void update(int node,int s,int e,int i,int j,int val)
+{
+    if(lazy[node]!=-1)
+    {
+        Tree[node]=(e-s+1)*lazy[node];
+        if(s!=e)
+        {
+            lazy[2*node]=lazy[node];
+            lazy[2*node+1]=lazy[node];
+        }
+        lazy[node]=-1;
+    }
+    if(e<i||j<s||s>e)
+    {
+        return;
+    }
+    if(s>=i&&e<=j)
+    {
+        Tree[node]=(e-s+1)*val;
+        if(s!=e)
+        {
+            lazy[2*node]=val;
+            lazy[2*node+1]=val;
+        }
+        return;
+    }
+    int m=(s+e)/2;
+    int l=2*node;
+    int r=2*node+1;
+    update(l,s,m,i,j,val);
+    update(r,m+1,e,i,j,val);
+    Tree[node]=Tree[l]+Tree[r];
+}
+int query(int node,int s,int e,int i,int j)
+{
+    if(lazy[node]!=-1)
+    {
+        Tree[node]=(e-s+1)*lazy[node];
+        if(s!=e)
+        {
+            lazy[2*node]=lazy[node];
+            lazy[2*node+1]=lazy[node];
+        }
+        lazy[node]=-1;
+    }
+    if(e<i||j<s||s>e)
+    {
+        return 0;
+    }
+    if(s>=i&&e<=j)
+    {
+        return Tree[node];
+    }
+    int m=(s+e)/2;
+    int l=2*node;
+    int r=2*node+1;
+    int left_ans=query(l,s,m,i,j);
+    int right_ans=query(r,m+1,e,i,j);
+    return left_ans+right_ans;
+}
+memset(Tree,0,sizeof Tree);
+memset(lazy,-1,sizeof lazy);
+
