@@ -1,0 +1,66 @@
+struct data
+{
+    int node1,node2,cost;
+    bool operator<(const data& c)const
+    {
+        return cost<c.cost;
+    }
+};
+int par[105];
+int Find(int f)
+{
+    if(par[f]==f)
+    {
+        return f;
+    }
+    par[f]=Find(par[f]);
+    return par[f];
+}
+bool Union(int p,int q)
+{
+    int rep1=Find(p);
+    int rep2=Find(q);
+    if(rep1!=rep2)
+    {
+        par[rep1]=rep2;
+        return true;
+    }
+    else
+        return false;
+}
+int kruskal(vector<data>edge,int n)
+{
+    int j=0,Total_Cost=0;
+    for(int i=0;i<n-1;++i)
+    {
+        while(Union(edge[j].node1,edge[j].node2)==false)
+        {
+            ++j;
+        }
+        Total_Cost+=edge[j].cost;
+    }
+    return Total_Cost;
+}
+int main()
+{
+    int node,e;
+    scanf("%d%d",&node,&e);
+    vector<data>edge;
+    for(int i=1;i<=node;++i)
+    {
+        par[i]=i;
+    }
+    int node1,node2,w;
+    while(e--)
+    {
+        scanf("%d%d%d",&node1,&node2,&w);
+        data input;
+        input.node1=node1;
+        input.node2=node2;
+        input.cost=w;
+        edge.push_back(input);
+    }
+    sort(edge.begin(),edge.end());
+    printf("%d",kruskal(edge,node));
+    return 0;
+}
