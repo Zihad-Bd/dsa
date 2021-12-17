@@ -1,0 +1,117 @@
+int Size=0,capacity=10;
+int tree[11];
+
+void shiftUp(int i)
+{
+    while(i>1&&tree[i/2]<tree[i])
+    {
+        swap(tree[i],tree[i/2]);
+        i/=2;
+    }
+}
+
+void Insert(int val)
+{
+    if(Size==capacity)
+    {
+        cout<<"Full"<<endl;
+        return;
+    }
+    ++Size;
+    tree[Size]=val;
+    shiftUp(Size);
+}
+
+void shiftDown(int i)
+{
+    int l,r,maxInd=i;
+    l=i*2;
+    r=i*2+1;
+    if(l<=Size&&tree[l]>tree[maxInd])
+    {
+        maxInd=l;
+    }
+    if(r<=Size&&tree[r]>tree[maxInd])
+    {
+        maxInd=r;
+    }
+    if(maxInd!=i)
+    {
+        swap(tree[i],tree[maxInd]);
+        shiftDown(maxInd);
+    }
+}
+
+void maxExtract()
+{
+    if(Size==0)
+    {
+        cout<<"empty"<<endl;
+        return ;
+    }
+    swap(tree[1],tree[Size]);
+    --Size;
+    shiftDown(1);
+}
+
+void Remove(int i)
+{
+    if(Size==0)
+    {
+        cout<<"empty"<<endl;
+        return ;
+    }
+    tree[i]=inf;
+    shiftUp(i);
+    maxExtract();
+}
+
+void priorityChange(int i,int val)
+{
+    int oldP=tree[i];
+    tree[i]=val;
+    if(oldP<val)
+    {
+        shiftUp(i);
+    }
+    else
+    {
+        shiftDown(i);
+    }
+}
+
+int main()
+{
+    int q;
+    cin>>q;
+    while(q--)
+    {
+        int val,ind;
+        string op;
+        cin>>op;
+        if(op=="Insert")
+        {
+            cin>>val;
+            Insert(val);
+        }
+        else if(op=="Max")
+        {
+            cout<<tree[1]<<endl;
+        }
+        else if(op=="maxExtract")
+        {
+            maxExtract();
+        }
+        else if(op=="Remove")
+        {
+            cin>>ind;
+            Remove(ind);
+        }
+        else
+        {
+            cin>>ind>>val;
+            priorityChange(ind,val);
+        }
+    }
+    return 0;
+}
