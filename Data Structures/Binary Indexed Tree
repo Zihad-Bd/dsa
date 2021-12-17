@@ -1,0 +1,21 @@
+    int tree[100005];
+    void update(int ind,int val,int n)
+    {
+        while(ind<=n)
+        {
+            tree[ind]+=val;
+            ind+=(ind&-ind);
+        }
+    }
+    int query(int ind,int n)
+    {
+        int sum=0;
+        while(ind>0)
+        {
+            sum+=tree[ind];
+            ind-=(ind&-ind);
+        }
+        return sum;
+    }
+    update(ind,val,n);
+    query(r,n)-query(l-1,n);
