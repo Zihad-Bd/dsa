@@ -1,0 +1,79 @@
+string s(2000005,'0'),pat;
+int failure[2000005];
+
+int main()
+{
+    int n,t,strLen,patLen;
+    cin>>n>>t;
+    for(int i=0;i<n;++i)
+    {
+        int ind;
+        cin>>ind;
+        s[ind]='1';
+    }
+    strLen=2*t;
+    patLen=t;
+    pat=s.substr(0,t);
+    s=s.substr(0,t)+s.substr(0,t);
+    //pr(s);
+    //pr(pat);
+    failure[0]=0;
+    for(int j=1,i=0;j<patLen;)
+    {
+        if(pat[i]==pat[j])
+        {
+            failure[j]=i+1;
+            ++i;
+            ++j;
+        }
+        else
+        {
+            if(i==0)
+            {
+                failure[j]=0;
+                ++j;
+            }
+            else
+            {
+                i=failure[i-1];
+            }
+        }
+    }
+    bool matched=false;
+    int fi;
+    for(int j=1,i=0;j<strLen;)
+    {
+        if(pat[i]==s[j])
+        {
+            if(i==patLen-1)
+            {
+                matched=true;
+                fi=j+1-patLen;
+                break;
+            }
+            ++i;
+            ++j;
+        }
+        else
+        {
+            if(i==0)
+            {
+                ++j;
+            }
+            else
+            {
+                i=failure[i-1];
+            }
+        }
+    }
+    /*if(matched)
+    {
+        printf("pattern found\n");
+    }
+    else
+    {
+        printf("pattern not found\n");
+    }*/
+    cout<<fi-1<<endl;
+    return 0;
+}
