@@ -1,0 +1,98 @@
+/*Notes:
+1.In set lower_bound and upper_bound works properly.
+2.order_of_key works as index based lower_bound.
+3.find_by_order return an iterator.
+4.order_of_key return an integer.
+*/
+#include<bits/stdc++.h>
+#define f first
+#define s second
+#include<ext/pb_ds/assoc_container.hpp>
+#include<ext/pb_ds/tree_policy.hpp>
+/*When push structure in set-
+struct Test
+{
+    int id;
+    char id2;
+    double id3;
+    bool operator<(const Test& t) const
+    {
+        if(this->id==t.id)
+        {
+            if(this->id2==t.id2)
+            {
+                return this->id3<t.id3;
+            }
+            else
+            {
+                return this->id2<t.id2;
+            }
+        }
+        else
+            return (this->id<t.id);
+
+    }
+};
+typedef tree<Test, null_type,less<Test>, rb_tree_tag,
+             tree_order_statistics_node_update>indexed_set;
+*/
+using namespace std;
+using namespace __gnu_pbds;
+typedef tree<int, null_type,less_equal<int>, rb_tree_tag,
+             tree_order_statistics_node_update>indexed_set;
+int main()
+{
+    indexed_set is;
+    is.insert(1);
+    is.insert(3);
+    is.insert(4);
+    is.insert(3);
+    is.insert(9);
+    //For iterate in forward direction-
+    /*for(auto it:is)
+    {
+        cout<<it<<endl;
+    }*/
+    /*For iterate from reverse direction-
+    for(auto it=is.rbegin();it!=is.rend();++it)
+    {
+        cout<<*it<<endl;
+    }*/
+
+    /*For find a value by its index-
+    cout<<*is.find_by_order(2);
+    We find the value at index 2 in here*/
+
+    /*For find the index of a value-
+    cout<<is.order_of_key(4);
+    We find the index of 7 in here*/
+
+    /*For erase a value-
+    is.erase(7);
+    Another way is erase the iterator,
+    is.erase(is.find(7));
+    We erase 7 in here*/
+
+    /*For erase a value by index-
+    is.erase(is.find_by_order(2));
+    We erase value in index 2 in here*/
+
+    /*For find a value-
+    if(is.find(5)!=is.end())
+    {
+        cout<<"found"<<endl;
+    }
+    else
+    {
+        cout<<"not found"<<endl;
+    }
+    We search 5 in here*/
+
+    for(auto it:is)
+    {
+        cout <<it<<endl;
+    }
+    return 0;
+}
+
+
