@@ -1,0 +1,41 @@
+ //Who can not move is win
+int main()
+{
+    int t;
+    scanf("%d",&t);
+    for(int i=1;i<=t;++i)
+    {
+        int k;
+        scanf("%d",&k);
+        int num,x=0,cnt_1=0;
+        for(int j=0;j<k;++j)
+        {
+            scanf("%d",&num);
+            x^=num;
+            if(num==1)
+            {
+                ++cnt_1;
+            }
+        }
+        printf("Case %d: ",i);
+        if(cnt_1==k)
+        {
+            if(k%2==0)
+                printf("Alice\n");
+            else
+                printf("Bob\n");
+        }
+        else
+        {
+            if(x)
+            {
+                printf("Alice\n");
+            }
+            else
+            {
+                printf("Bob\n");
+            }
+        }
+    }
+    return 0;
+}
