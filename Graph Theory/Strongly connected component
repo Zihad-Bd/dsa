@@ -1,0 +1,74 @@
+stack<int>topsort;
+int vis[100005];
+vector<int>comp[100005];
+void dfs(int u,vector<int>g[])
+{
+    vis[u]=1;
+    int Size=g[u].size();
+    for(int i=0;i<Size;++i)
+    {
+        int v=g[u][i];
+        if(!vis[v])
+        {
+            dfs(v,g);
+        }
+    }
+    topsort.push(u);
+}
+void dfs2(int u,int id,vector<int>rev_g[])
+{
+    comp[id].push_back(u);
+    vis[u]=1;
+    int Size=rev_g[u].size();
+    for(int i=0;i<Size;++i)
+    {
+        int v=rev_g[u][i];
+        if(!vis[v])
+        {
+            dfs2(v,id,rev_g);
+        }
+    }
+}
+int main()
+{
+    int n,e;
+    scanf("%d%d",&n,&e);
+    vector<int>g[n+5],rev_g[n+5];
+    while(e--)
+    {
+        int node1,node2;
+        scanf("%d%d",&node1,&node2);
+        g[node1].push_back(node2);
+        rev_g[node2].push_back(node1);
+    }
+    for(int i=1;i<=n;++i)
+    {
+        if(!vis[i])
+        {
+            dfs(i,g);
+        }
+    }
+    me(vis,0);
+    int num_of_comp=0;
+    while(!topsort.empty())
+    {
+        int i=topsort.top();
+        topsort.pop();
+        if(!vis[i])
+        {
+            ++num_of_comp;
+            dfs2(i,num_of_comp,rev_g);
+        }
+    }
+    printf("%d\n",num_of_comp);
+    for(int i=1;i<=num_of_comp;++i)
+    {
+        printf("Component %d has following nodes:",i);
+        for(int j=0;j<comp[i].size();++j)
+        {
+            printf(" %d",comp[i][j]);
+        }
+        printf("\n");
+    }
+    return 0;
+}
