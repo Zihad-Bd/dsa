@@ -1,0 +1,82 @@
+void floyed_warshall(int n,int g[][105],int next[][105])
+{
+    for(int k=1;k<=n;++k)
+    {
+        for(int i=1;i<=n;++i)
+        {
+            for(int j=1;j<=n;++j)
+            {
+                if(g[i][j]>g[i][k]+g[k][j])
+                {
+                    g[i][j]=g[i][k]+g[k][j];
+                    next[i][j]=next[i][k];
+                }
+            }
+        }
+    }
+}
+void shortest_path(int i,int j,int next[][105],int g[][105])
+{
+    vector<int>path;
+    int l=i;
+    while(l!=j)
+    {
+        path.push_back(l);
+        l=next[l][j];
+        if(!l)
+        {
+            printf("There is no path between %d and %d\n",i,j);
+            return;
+        }
+    }
+    printf("The shortest path cost between %d and %d is %d\n",i,j,g[i][j]);
+    path.push_back(j);
+    int Size=path.size();
+    for(int k=0;k<Size;++k)
+    {
+        printf("%d ",path[k]);
+    }
+    printf("\n");
+}
+int main()
+{
+    int n,e;
+    scanf("%d%d",&n,&e);
+    int g[n+5][105],next[n+5][105];
+    memset(next,0,sizeof next);
+    for(int i=1;i<=n;++i)
+    {
+        for(int j=1;j<=n;++j)
+        {
+            if(i==j)
+            {
+                g[i][j]=0;
+            }
+            else
+            {
+                g[i][j]=10e8;
+            }
+        }
+    }
+    while(e--)
+    {
+        int node1,node2,cost;
+        scanf("%d%d%d",&node1,&node2,&cost);
+        g[node1][node2]=cost;
+        g[node2][node1]=cost;
+        next[node1][node2]=node2;
+        next[node2][node1]=node1;
+        //if the edges are directed the above line will be removed
+    }
+    floyed_warshall(n,g,next);
+    int q;
+    scanf("%d",&q);
+    while(q--)
+    {
+        int u,v;
+        printf("Which nodes shortest path you want to know?\n");
+        scanf("%d%d",&u,&v);
+        shortest_path(u,v,next,g);
+    }
+    return 0;
+}
