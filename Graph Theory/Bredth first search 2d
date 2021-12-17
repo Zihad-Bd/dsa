@@ -1,0 +1,36 @@
+int r, c;
+
+int dis[N][N], ways[N][N];
+bool vis[N][N];
+
+bool valid(int x, int y) {
+   return x >= 0 && x < r && y >= 0 && y < c;
+}
+
+void bfs(int x, int y)
+{
+	queue<pair<int, int> > q;
+	q.push({x, y});
+	ways[x][y] = 1;
+	vis[x][y] = 1;
+	while ( !q.empty()) {
+		x = q.front().f;
+		y = q.front().s;
+		q.pop();
+		for (int dir = 0; dir < 4; dir++) {
+			int x2 = x + dx[dir];
+			int y2 = y + dy[dir];
+			if ( !valid(x2, y2)) {
+				continue;
+			}
+			if ( !vis[x2][y2]) {
+				dis[x2][y2] = dis[x][y] + 1;
+				vis[x2][y2] = 1;
+				ways[x2][y2] += ways[x][y];
+				q.push({x2, y2});
+			} else if (dis[x][y] + 1 == dis[x2][y2]) {
+			ways[x2][y2] += ways[x][y];
+			}
+		}
+	}
+}
