@@ -1,0 +1,47 @@
+vector<ll> fac(lim), nc(lim);
+
+void ncr(ll n) {
+
+   /// calculate nc1, nc2, nc3,..., ncn
+
+   nc[1] = n;
+   for (ll i = 2; i <= n; ++i) {
+      nc[i] = (nc[i - 1] * (n - i + 1)) / i;
+   }
+}
+
+ll dearrangement(ll n) {
+   ncr(n);
+   fac[0] = 1;
+   for (ll i = 1; i <= n; ++i) {
+      fac[i] = i * fac[i - 1];
+   }
+   ll res = fac[n];
+   for (ll r = 1, sign = -1; r <= n; ++r, sign *= -1) {
+      res += sign * fac[n - r] * nc[r];
+   }
+   return res;
+}
+
+int main() {
+   IOS;
+   ll n;
+   cin >> n;
+   vector<ll> d(n + 5);
+   /// first method, dp
+
+   d[1] = 0;
+   d[2] = 1;
+   for (ll i = 3; i <= n; ++i) {
+      d[i] = (i - 1) * (d[i - 2] + d[i - 1]);
+   }
+   /// second method, Inclusion Exclusion Principle
+
+   for (ll i = 2; i <= n; ++i) {
+      d[i] = dearrangement(i);
+   }
+   for (ll i = 0; i <= n; ++i) {
+      cout << d[i] << ' ';
+   }
+   return 0;
+}
