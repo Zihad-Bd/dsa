@@ -1,0 +1,39 @@
+
+ll Prims(ll n,vector<ll> G[], vector<ll> cost[], vector<ll> vis) {
+   priority_queue<pair<ll, ll>, vector<pair<ll, ll> >, greater<pair<ll, ll> > > pq;
+   ll sum = 0;
+   for (ll i = 1, u = 1, w; i < n; ++i) {
+      vis[u] = 1;
+      for (ll j = 0; j < G[u].sz(); ++j) {
+         ll v = G[u][j];
+         if ( !vis[v]) {
+            pq.em(cost[u][j], v);
+         }
+      }
+      while (vis[u]) {
+         auto  p = pq.top();
+         pq.pop();
+         u = p.s;
+         w = p.f;
+      }
+     sum += w;
+   }
+   return sum;
+}
+int main() {
+   IOS;
+   ll n, e;
+   cin >> n >> e;
+   vector<ll> G[n + 5], cost[n + 5];
+   while (e--) {
+     ll n1, n2, w;
+     cin >> n1 >> n2 >> w;
+     G[n1].push_back(n2);
+     G[n2].push_back(n1);
+     cost[n1].push_back(w);
+     cost[n2].push_back(w);
+   }
+   vector<ll> vis(n + 5, 0);
+   cout << Prims(n, G, cost, vis);
+   return 0;
+}
