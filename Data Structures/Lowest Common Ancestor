@@ -1,0 +1,47 @@
+/// Using 1-based indexing
+vector<ll> depth(N);
+vector<vector<ll> > par(N, vector<ll> (30));
+ll n;
+
+void dfs(ll u, vector<ll> G[]) {
+   for (auto v : G[u]) {
+      if (v != par[u][0]) {
+         depth[v] = depth[u] + 1;
+         par[v][0] = u;
+         dfs(v, G);
+      }
+   }
+}
+
+ll lca(ll n1, ll n2) {
+   if (depth[n2] > depth[n1]) {
+      swap(n1, n2);
+   }
+   for (ll j = 30; j >= 0; --j) {
+      if (depth[n1] - (1 << j) >= depth[n2]) {
+         n1 = par[n1][j];
+      }
+   }
+   // If consider a node is an ancestor of itself then if (n1 == n2)
+        // return n1;
+   for (ll j = 30; j >= 0; --j) {
+      if (par[n1][j] && par[n1][j] != par[n2][j]) {
+         n1 = par[n1][j];
+         n2 = par[n2][j];
+      }
+   }
+   return par[n1][0];
+}
+
+void lcaInit() {
+   for (ll i = 1; (1 << i) < n; ++i) {
+      for (ll j = 1; j <= n; ++j) {
+         if (par[j][i - 1]) {
+            par[j][i] = par[par[j][i - 1]][i - 1];
+         }
+      }
+   }
+}
+par[1][0] = 1;
+dfs(1, G);
+lcaInit();
