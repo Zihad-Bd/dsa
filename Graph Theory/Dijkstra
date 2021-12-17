@@ -1,0 +1,98 @@
+struct data
+{
+    int node;
+    int path_cost;
+    bool operator < (const data&c)const
+    {
+        return path_cost>c.path_cost;
+    }
+};
+void dijkstra(int n,vector<int>g[],vector<int>cost[])
+{
+    int flag=0;
+    priority_queue<data>pq;
+    data p;
+    p.node=2;
+    //p.node=source node
+    p.path_cost=0;
+    pq.push(p);
+    int d[n+5];
+    for(int i=1;i<=n;++i)
+    {
+        d[i]=1000;
+    }
+    d[2]=0;
+    //d[]=source node
+    int par[n+5];
+    while(!pq.empty())
+    {
+        data k;
+        k=pq.top();
+        pq.pop();
+        if(k.node==3)
+        {
+            //k.node=destination node
+            flag=1;
+            break;
+        }
+        int u=k.node,v;
+        int Size=g[u].size();
+        for(int i=0;i<Size;++i)
+        {
+            v=g[u][i];
+            if(d[u]+cost[u][i]<d[v])
+            {
+                d[v]=d[u]+cost[u][i];
+                p.node=v;
+                p.path_cost=d[v];
+                pq.push(p);
+                par[v]=u;
+            }
+        }
+    }
+    if(!flag)
+    {
+        printf("-1");
+    }
+    else
+    {
+        int i=3,path[n+5],j=0;
+        //i=destination node
+        path[0]=3;
+        //path[0]=destination node
+        while(i!=2)
+        {
+            i=par[i];
+            path[++j]=i;
+            printf("%d ",path[j]);
+        }
+        printf("\n");
+        for(;j>-1;--j)
+        {
+            printf("%d ",path[j]);
+        }
+    }
+}
+int main()
+{
+    int n,e;
+    scanf("%d%d",&n,&e);
+    vector<int>g[n+5];
+    vector<int>cost[n+5];
+    while(e--)
+    {
+        int node1,node2,weight;
+        scanf("%d%d%d",&node1,&node2,&weight);
+        if(node1==node2)
+        {
+            continue;
+        }
+        //not including loop
+        g[node1].push_back(node2);
+        g[node2].push_back(node1);
+        cost[node1].push_back(weight);
+        cost[node2].push_back(weight);
+    }
+    dijkstra(n,g,cost);
+    return 0;
+}
