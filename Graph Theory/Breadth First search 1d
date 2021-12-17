@@ -1,0 +1,24 @@
+int dis[N], ways[N];
+bool vis[N];
+vector<int> g[N];
+
+void bfs(int u) {
+	queue<int> q;
+	q.push(u);
+	ways[u] = 1;
+	vis[u] = 1;
+	while ( !q.empty()) {
+		u = q.front();
+		q.pop();
+		for (auto v : g[u]) {
+			if (!vis[v]) {
+				dis[v] = dis[u] + 1;
+				vis[v] = 1;
+				ways[v] += ways[u];
+				q.push(v);
+			} else if (dis[u] + 1 == dis[v]) {
+			ways[v] += ways[u];
+			}
+		}
+	}
+}
